@@ -1,0 +1,2 @@
+# sync_k8s_docker_images
+同步k8s的docker镜像
