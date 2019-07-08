@@ -8,11 +8,11 @@ services:
   - docker
 
 before_install:
-  - sudo apt update && sudo apt install -y jq
+  - sudo apt update && sudo apt install -y jq curl
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - bash main.sh
+  - ls && bash main.sh
 
 #deploy:
 #  provider: script
