@@ -40,17 +40,20 @@ for image in ${images[@]} ; do
     regex='^(v?[\.0-9]+)$'
     for tag in `cat ${k8s_image_json_file}|jq -r '.tags|.[]'`;
     do
+      echo "tag: $tag"
     	# $tag => k8s tag
       if [[ $tag =~ $regex ]]; then
 	    #echo $image_name/"${BASH_REMATCH[1]}"
 	    v=${BASH_REMATCH[1]}
 	    
 	    exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
+            echo "exists: $exists"
 	    if [[ "$exists" == "" ]]; then
-	    	docker pull $image:$tag
-	    	docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	docker push ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
+		echo empty
+	    	#docker pull $image:$tag
+	    	#docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	#docker push ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	#docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
 	    fi
 	  fi
 	done

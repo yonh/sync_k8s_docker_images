@@ -7,25 +7,25 @@ set -e
 ## 本脚本是用来同步使用kubeadm 安装k8s 时需要的镜像（使得国内可以免翻墙使用 kubeadm 安装 k8s）, 嫌麻烦可以使用我的 docker hub 同步的镜像，不必自己同步
 
 #### 软件依赖
-# bash,docker,jq
-# apt update && apt install -y docker.io jq
+## bash,docker,jq
+## apt update && apt install -y docker.io jq
 
 #### 使用方式
 ## 修改本脚本下的 Docker Hub 的账户密码，或设置环境变量 DOCKER_USERNAME, DOCKER_PASSWORD
 ## bash main.sh
 
 
-# 由于脚本预计跑在 TravisCi,所以密码使用环境变量配置起来，如果是跑在自己的服务器，可以把注释解开
+## 由于脚本预计跑在 TravisCi,所以密码使用环境变量配置起来，如果是跑在自己的服务器，可以把注释解开
 DOCKER_USERNAME=""
 DOCKER_PASSWORD=""
-# echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+## echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 require_cmds="docker jq"
 for cmd in $require_cmds ; do
-  command -v $cmd >/dev/null 2>&1 || { echo "找不到命令\"$cmd\", 请检查依赖软件是否安装" >&2; exit 1; }
+  command -v $cmd >/dev/null 2>&1 || { echo "Unknown command \"$cmd\", please try install the package first." >&2; exit 1; }
 done
 
-# 需要同步的镜像
+## 需要同步的镜像
 images=(
 k8s.gcr.io/kube-apiserver
 k8s.gcr.io/kube-controller-manager
@@ -40,19 +40,18 @@ k8s.gcr.io/kubernetes-dashboard
 mkdir -p k8s.gcr.io
 mkdir -p hub.docker.com
 for image in ${images[@]} ; do
-	# 获取image name,删掉 k8s.gcr.io/ 部分
+	## 获取image name,删掉 k8s.gcr.io/ 部分
     image_name=${image:11}
 
     #### 下载镜像信息描述文件 ##
     image_json_file="k8s.gcr.io/${image_name}.json"
     curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
-    # 检查 json格式是否正常
+    ## 检查 json格式是否正常
     cat ${image_json_file}|jq -e . >/dev/null
 
     image_json_file="hub.docker.com/${image_name}.json"
     curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/
-    # 检查 json格式是否正常
-    # 检查 json格式是否正常
+    ## 检查 json格式是否正常
     cat ${image_json_file}|jq -e . >/dev/null
     #### 下载镜像信息描述文件 [END]###
 
@@ -70,7 +69,7 @@ for image in ${images[@]} ; do
 	    #echo $image_name/"${BASH_REMATCH[1]}"
 	    v=${BASH_REMATCH[1]}
 	    
-	    # 取出没有上传到 docker hub 的镜像 tags
+	    ## 取出没有上传到 docker hub 的镜像 tags
 	    exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
 	    if [[ "$exists" == "" ]]; then
 	    	docker pull $image:$tag

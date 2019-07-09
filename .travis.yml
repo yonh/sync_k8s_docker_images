@@ -17,8 +17,7 @@ before_install:
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - export LANG="zh_CN.UTF-8" && export LANGUAGE="zh_CN:zh:en_US:en" && ./main.sh
-  #- ./main_travis.sh
+  - ./main_travis.sh
 
 #deploy:
 #  provider: script
