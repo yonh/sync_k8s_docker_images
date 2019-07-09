@@ -30,7 +30,7 @@ for image in ${images[@]} ; do
     cat ${image_json_file}|jq -e . >/dev/null
 
     image_json_file="hub.docker.com/${image_name}.json"
-    curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/
+    curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/?page_size=1000
     cat ${image_json_file}|jq -e . >/dev/null
 
 
@@ -40,9 +40,10 @@ for image in ${images[@]} ; do
     regex='^(v?[\.0-9]+)$'
     for tag in `cat ${k8s_image_json_file}|jq -r '.tags|.[]'`;
     do
-      echo "tag: $tag"
+      echo $image_name
     	# $tag => k8s tag
       if [[ $tag =~ $regex ]]; then
+      echo "tag: $tag"
 	    #echo $image_name/"${BASH_REMATCH[1]}"
 	    v=${BASH_REMATCH[1]}
 	    

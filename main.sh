@@ -50,7 +50,7 @@ for image in ${images[@]} ; do
     cat ${image_json_file}|jq -e . >/dev/null
 
     image_json_file="hub.docker.com/${image_name}.json"
-    curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/
+    curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/?page_size=1000
     ## 检查 json格式是否正常
     cat ${image_json_file}|jq -e . >/dev/null
     #### 下载镜像信息描述文件 [END]###
