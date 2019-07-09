@@ -11,7 +11,7 @@ services:
   - docker
 
 before_install:
-  - sudo apt update && sudo apt install -y jq curl
+  - sudo apt update && sudo apt install -y jq curl language-pack-zh-hans
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
