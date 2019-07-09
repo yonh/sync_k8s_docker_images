@@ -15,7 +15,7 @@ set -e
 ## bash main.sh
 
 
-# 由于脚本预计跑在 TravisCi,所以密码使用环境变量配置起来，如果是泡在自己的服务器，可以把注释解开
+# 由于脚本预计跑在 TravisCi,所以密码使用环境变量配置起来，如果是跑在自己的服务器，可以把注释解开
 DOCKER_USERNAME=""
 DOCKER_PASSWORD=""
 # echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -46,12 +46,14 @@ for image in ${images[@]} ; do
     #### 下载镜像信息描述文件 ##
     image_json_file="k8s.gcr.io/${image_name}.json"
     curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
-    cat ${image_json_file}|jq -e . >/dev/null # 检查 json格式是否正常
+    # 检查 json格式是否正常
+    cat ${image_json_file}|jq -e . >/dev/null
 
     image_json_file="hub.docker.com/${image_name}.json"
     curl -s -o ${image_json_file} https://hub.docker.com/v2/repositories/${DOCKER_USERNAME}/${image_name}/tags/
     # 检查 json格式是否正常
-    cat ${image_json_file}|jq -e . >/dev/null # 检查 json格式是否正常
+    # 检查 json格式是否正常
+    cat ${image_json_file}|jq -e . >/dev/null
     #### 下载镜像信息描述文件 [END]###
 
 

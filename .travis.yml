@@ -4,6 +4,9 @@ language: generic
 
 dist: xenial
 
+env:
+  - LANG="zh_CN.UTF-8"
+
 services:
   - docker
 
@@ -12,7 +15,8 @@ before_install:
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - ./main_travis.sh
+  - ./main.sh
+  #- ./main_travis.sh
 
 #deploy:
 #  provider: script
