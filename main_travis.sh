@@ -51,17 +51,18 @@ for image in ${images[@]} ; do
 	    
         not=`cat hub.docker.com/${image_name}.json|jq -r '.detail'`
 
-        if [[ "$not" = "Object not found" ]]; then
+        if [[ "$not" == "Object not found" ]]; then
         	exists=""
         else
         	exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
         fi
 	    
 	    if [[ "$exists" == "" ]]; then
-	    	docker pull $image:$tag
-	    	docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	docker push ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
+            echo "docker pull $image:$tag"
+	    	#docker pull $image:$tag
+	    	#docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	#docker push ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	#docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
 	    fi
 	  fi
 	done
