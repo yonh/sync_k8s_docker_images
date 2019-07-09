@@ -5,7 +5,9 @@ language: generic
 dist: xenial
 
 env:
-  - LANG="zh_CN.UTF-8"
+  global:
+    - LANG="zh_CN.UTF-8"
+    - LANGUAGE="zh_CN:zh:en_US:en"
 
 services:
   - docker
