@@ -49,7 +49,7 @@ for image in ${images[@]} ; do
 	    v=${BASH_REMATCH[1]}
 	    
 	    
-        not=`cat a.json|jq -r '.detail'`
+        not=`cat hub.docker.com/${image_name}.json|jq -r '.detail'`
 
         if [[ "$not" = "Object not found" ]]; then
         	exists=""
