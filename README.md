@@ -2,6 +2,10 @@
 同步 `k8s` 的 `docker` 镜像到 `Docker Hub`，也可以直接跳转到我的镜像中心仓库, [点击这里跳转](https://hub.docker.com/u/yonh)
 
 
+```
+# 生成travis-ci执行脚本
+cat main.sh|grep -v \#\# > main_travis.sh
+```
 
 ### 计划工作（如果有时间的话）
 

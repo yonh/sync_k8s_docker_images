@@ -1,12 +1,17 @@
 #!/bin/bash
-
 set -e
 
-#### version 0.0.1(190706)
+
+
+
+
+
+#DOCKER_USERNAME=""
+#DOCKER_PASSWORD=""
 
 require_cmds="docker jq"
 for cmd in $require_cmds ; do
-  command -v $cmd >/dev/null 2>&1 || { echo "can not found \"$cmd\", please check" >&2; exit 1; }
+  command -v $cmd >/dev/null 2>&1 || { echo "Unknown command \"$cmd\", please try install the package first." >&2; exit 1; }
 done
 
 images=(
@@ -40,21 +45,23 @@ for image in ${images[@]} ; do
     regex='^(v?[\.0-9]+)$'
     for tag in `cat ${k8s_image_json_file}|jq -r '.tags|.[]'`;
     do
-      echo $image_name
-    	# $tag => k8s tag
       if [[ $tag =~ $regex ]]; then
-      echo "tag: $tag"
-	    #echo $image_name/"${BASH_REMATCH[1]}"
 	    v=${BASH_REMATCH[1]}
 	    
-	    exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
-            echo "exists: $exists"
+	    
+        not=`cat a.json|jq -r '.detail'`
+
+        if [[ "$not" = "Object not found" ]]; then
+        	exists=""
+        else
+        	exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
+        fi
+	    
 	    if [[ "$exists" == "" ]]; then
-		echo empty
-	    	#docker pull $image:$tag
-	    	#docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	#docker push ${DOCKER_USERNAME}/${image_name}:${tag}
-	    	#docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
+	    	docker pull $image:$tag
+	    	docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	docker push ${DOCKER_USERNAME}/${image_name}:${tag}
+	    	docker rmi ${DOCKER_USERNAME}/${image_name}:${tag} $image:$tag
 	    fi
 	  fi
 	done

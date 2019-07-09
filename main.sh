@@ -16,8 +16,8 @@ set -e
 
 
 ## 由于脚本预计跑在 TravisCi,所以密码使用环境变量配置起来，如果是跑在自己的服务器，可以把注释解开
-DOCKER_USERNAME=""
-DOCKER_PASSWORD=""
+#DOCKER_USERNAME=""
+#DOCKER_PASSWORD=""
 ## echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 require_cmds="docker jq"
@@ -64,13 +64,22 @@ for image in ${images[@]} ; do
     regex='^(v?[\.0-9]+)$'
     for tag in `cat ${k8s_image_json_file}|jq -r '.tags|.[]'`;
     do
-    	# $tag => k8s tag
+    	## $tag => k8s tag
       if [[ $tag =~ $regex ]]; then
-	    #echo $image_name/"${BASH_REMATCH[1]}"
+	    ## echo $image_name/"${BASH_REMATCH[1]}"
 	    v=${BASH_REMATCH[1]}
 	    
-	    ## 取出没有上传到 docker hub 的镜像 tags
-	    exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
+	    
+	    ## 可能镜像么有上传过 docker hub，此时会返回对象找不到
+        not=`cat a.json|jq -r '.detail'`
+
+        if [[ "$not" = "Object not found" ]]; then
+        	exists=""
+        else
+        	## 取出没有上传到 docker hub 的镜像 tags
+        	exists=`cat hub.docker.com/${image_name}.json|jq -r ".results[]|.name|select(. == \"$v\")|."`
+        fi
+	    
 	    if [[ "$exists" == "" ]]; then
 	    	docker pull $image:$tag
 	    	docker tag $image:$tag ${DOCKER_USERNAME}/${image_name}:${tag}
