@@ -4,16 +4,17 @@ language: generic
 
 dist: xenial
 
-env:
-  global:
-    - LANG="zh_CN.UTF-8"
-    - LANGUAGE="zh_CN:zh:en_US:en"
+#env:
+#  global:
+#    - LANG="zh_CN.UTF-8"
+#    - LANGUAGE="zh_CN:zh:en_US:en"
 
 services:
   - docker
 
 before_install:
-  - sudo apt update && sudo apt install -y jq curl language-pack-zh-hans
+  - sudo apt update && sudo apt install -y jq curl
+# language-pack-zh-hans
 
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
