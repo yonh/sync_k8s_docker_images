@@ -1,4 +1,8 @@
 # sync_k8s_docker_images
+
+[![Build Status](https://travis-ci.com/yonh/sync_k8s_docker_images.svg?branch=master)](https://travis-ci.com/yonh/sync_k8s_docker_images)
+
+
 同步 `k8s` 的 `docker` 镜像到 `Docker Hub`，也可以直接跳转到我的镜像中心仓库, [点击这里跳转](https://hub.docker.com/u/yonh)
 
 
