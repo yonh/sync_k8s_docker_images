@@ -6,11 +6,12 @@ set -e
 #### version 0.0.2 (190724)
 ##> 修复 Docker Hub 镜像只获取第一页的数据导致大多数镜像每次跑脚本都重复提交的问题
 ##> 完善bash脚本检查(bash 版本小于4.0),提示版本过低警告, 其实脚本是支持3的
-
+#### version 0.0.3 (210413)
+##> 替换k8s镜像版本获取API地址,旧版地址返回内容不全且没有更新镜像
 
 
 #### plans
-#### version 0.0.3
+#### version 0.0.4
 ##> 支持多 registry push 方案
 
 
@@ -69,7 +70,8 @@ do
 
     #### 下载镜像信息描述文件 ##
     image_json_file="k8s.gcr.io/${image_name}.json"
-    curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
+    # curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
+    curl -s -o $image_json_file https://k8s.gcr.io/v2/${image_name}/tags/list
     ## 检查 json格式是否正常
     cat ${image_json_file}|jq -e . >/dev/null
 

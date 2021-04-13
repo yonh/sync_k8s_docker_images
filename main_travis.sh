@@ -13,7 +13,6 @@ set -e
 
 
 
-
 function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 
 if version_gt "4.0.0" $BASH_VERSION ; then
@@ -41,13 +40,14 @@ k8s.gcr.io/kubernetes-dashboard-amd64
 
 mkdir -p k8s.gcr.io
 mkdir -p hub.docker.com
-for image in ${images[@]} ; do
-    echo "image:" $image
+for image in ${images[@]} ;
+do
 
     image_name=${image:11}
 
     image_json_file="k8s.gcr.io/${image_name}.json"
-    curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
+    # curl -s -o $image_json_file https://gcr.io/v2/google-containers/${image_name}/tags/list
+    curl -s -o $image_json_file https://k8s.gcr.io/v2/${image_name}/tags/list
     cat ${image_json_file}|jq -e . >/dev/null
 
     # docker hub 不是一次性给出所有数据，需要分页查询,所以这里做特殊处理
