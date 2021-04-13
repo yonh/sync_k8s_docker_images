@@ -113,7 +113,7 @@ do
     k8s_image_json_file="k8s.gcr.io/${image_name}.json"
     hub_image_json_file="hub.docker.com/${image_name}.json"
     
-    regex='^(v?[\.0-9]+)$'
+    regex='^(v?[\.0-9\-]+)$'
     for tag in `cat ${k8s_image_json_file}|jq -r '.tags|.[]'`;
     do
     	## $tag => k8s tag
