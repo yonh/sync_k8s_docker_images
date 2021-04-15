@@ -8,6 +8,7 @@ set -e
 ##> 完善bash脚本检查(bash 版本小于4.0),提示版本过低警告, 其实脚本是支持3的
 #### version 0.0.3 (210413)
 ##> 替换k8s镜像版本获取API地址,旧版地址返回内容不全且没有更新镜像
+##> 添加ingress-nginx镜像下载
 
 
 #### plans
@@ -57,6 +58,7 @@ k8s.gcr.io/pause
 k8s.gcr.io/etcd
 k8s.gcr.io/coredns
 k8s.gcr.io/kubernetes-dashboard-amd64
+k8s.gcr.io/ingress-nginx/controller
 )
 
 
